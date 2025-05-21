@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace MultiplyShiftHashing
 {
@@ -70,18 +71,24 @@ namespace MultiplyShiftHashing
             Console.WriteLine($"Hashing {x} in binary: {BigIntegerToBinary(hashValue89, l)}");
             Console.WriteLine("*****Missing check for all 1s*****");
             int n = 10000;
+            Stopwatch watch = Stopwatch.StartNew();
             ulong mulShiftCount = 0UL;
-            BigInteger mulPrimeCount = BigInteger.Zero;
             foreach (var tup in CreateStream(n, l)) {
                 ulong key = tup.Item1; 
                 ulong hash1 = MultiplyShiftHashing(key, a , l);
                 mulShiftCount += hash1;
-
+            }
+            watch.Stop();
+            Console.WriteLine($"Sum of MultiplyShiftHashing: {mulShiftCount} (Time: {watch.ElapsedMilliseconds} ms)");
+            
+            watch.Restart();
+            BigInteger mulPrimeCount = BigInteger.Zero;
+            foreach (var tup in CreateStream(n, l)) {
+                ulong key = tup.Item1; 
                 BigInteger hash2 = MultiModPrimeHashing(key, bigInt89a, bigInt89b, l);
                 mulPrimeCount += hash2;
             }
-            Console.WriteLine($"Sum of MultiplyShiftHashing: {mulShiftCount}");
-            Console.WriteLine($"Sum of MultiModPrimeHashing: {mulPrimeCount}");
+            Console.WriteLine($"Sum of MultiModPrimeHashing: {mulPrimeCount} (Time: {watch.ElapsedMilliseconds} ms)");
         }
         static ulong MultiplyShiftHashing(ulong x, ulong a, int l) {
             return (a*x) >> (64-l);
