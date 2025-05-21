@@ -69,6 +69,19 @@ namespace MultiplyShiftHashing
             Console.WriteLine($"Hashing {x} gives: {hashValue89}");
             Console.WriteLine($"Hashing {x} in binary: {BigIntegerToBinary(hashValue89, l)}");
             Console.WriteLine("*****Missing check for all 1s*****");
+            int n = 10000;
+            ulong mulShiftCount = 0UL;
+            BigInteger mulPrimeCount = BigInteger.Zero;
+            foreach (var tup in CreateStream(n, l)) {
+                ulong key = tup.Item1; 
+                ulong hash1 = MultiplyShiftHashing(key, a , l);
+                mulShiftCount += hash1;
+
+                BigInteger hash2 = MultiModPrimeHashing(key, bigInt89a, bigInt89b, l);
+                mulPrimeCount += hash2;
+            }
+            Console.WriteLine($"Sum of MultiplyShiftHashing: {mulShiftCount}");
+            Console.WriteLine($"Sum of MultiModPrimeHashing: {mulPrimeCount}");
         }
         static ulong MultiplyShiftHashing(ulong x, ulong a, int l) {
             return (a*x) >> (64-l);
@@ -99,6 +112,32 @@ namespace MultiplyShiftHashing
             if (bits > 0)
                 binary = binary.PadLeft(bits, '0');
             return binary;
+        }
+        public static IEnumerable < Tuple < ulong , int > > CreateStream(int n, int l) {
+            // We generate a random uint64 number .
+            Random rnd = new System.Random();
+            ulong a = 0UL ;
+            Byte[] b = new Byte[8];
+            rnd.NextBytes(b);
+            for(int i=0; i < 8; ++i ) {
+            a = (a<<8) + (ulong) b[i];
+            }
+            // We demand that our random number has 30 zeros on the least
+            // significant bits and then a one.
+            a = (a|((1UL<<31) - 1UL))^((1UL<<30) - 1UL);
+            ulong x = 0UL;
+            for (int i = 0; i < n /3; ++i ) {
+            x = x + a ;
+            yield return Tuple.Create(x & (((1UL << l ) - 1UL ) << 30), 1);
+            }
+            for ( int i = 0; i < (n + 1)/3; ++ i ) {
+            x = x + a ;
+            yield return Tuple.Create (x & (((1UL << l ) - 1UL) << 30), -1);
+            }
+            for (int i = 0; i < ( n + 2) /3; ++ i ) {
+            x = x + a ;
+            yield return Tuple.Create (x&(((1UL<< l ) - 1UL)<< 30), 1);
+            }
         }
     }
 }
