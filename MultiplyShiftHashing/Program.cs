@@ -68,7 +68,7 @@ namespace MultiplyShiftHashing
             Console.WriteLine($"MultiModPrimeHashing with a = {bigInt89a} and b = {bigInt89b}.");
             Console.WriteLine($"Hashing {x} gives: {hashValue89}");
             Console.WriteLine($"Hashing {x} in binary: {BigIntegerToBinary(hashValue89, l)}");
-
+            Console.WriteLine("*****Missing check for all 1s*****");
         }
         static ulong MultiplyShiftHashing(ulong x, ulong a, int l) {
             return (a*x) >> (64-l);
