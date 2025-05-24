@@ -35,12 +35,12 @@ class Hash {
 	
 	public static void time_hash(Func<UInt64,int,UInt64> hash, int l, int n)
 	{
-		IEnumerable<Tuple<ulong, int>> rand_Stream = Stream.CreateStream(n,l); 
+		IEnumerable<Tuple<ulong, int>> rand_stream = Stream.CreateStream(n,l); 
 		BigInteger hash_sum = 0;
 		
 		System.Console.WriteLine($"Starting {hash.Method.Name} hash:");
 		Stopwatch watch = Stopwatch.StartNew();
-		foreach (var pair in rand_Stream) {
+		foreach (var pair in rand_stream) {
 			hash_sum += hash(pair.Item1, l);
 		}
 		watch.Stop();

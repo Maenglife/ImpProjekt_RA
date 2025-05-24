@@ -1,3 +1,6 @@
+using System.Numerics;
+using System.Diagnostics;
+
 class Hashtable {
 	private List<(UInt64,Int64)>[] table;
 	private Func<UInt64,int,UInt64> hash;
@@ -59,5 +62,32 @@ class Hashtable {
 		}
 		bucket.Add((x,d));
 		return;
+	}
+	
+	public BigInteger cubic_sums(int n) {
+		if (this.pow_l > n) {
+			throw new ArgumentOutOfRangeException(nameof(n), "n must be greater than 2^l");
+		}
+		IEnumerable<Tuple<ulong, int>> rand_stream = Stream.CreateStream(n,this.l);
+		
+		System.Console.WriteLine($"Creating {this.hash.Method.Name} hashtable, n:{n}, l^2:{this.pow_l}:");
+		Stopwatch watch = Stopwatch.StartNew();
+		foreach (Tuple<ulong, int> pair in rand_stream) {
+			increment(pair.Item1,pair.Item2);
+		}
+		
+		System.Console.WriteLine($"Calculating cubic_sums, creation took {watch.ElapsedMilliseconds} ms:");
+		BigInteger cube_sum = 0;
+		for (int i = 0; i<this.pow_l; i++) {
+			List<(UInt64,Int64)> bucket = table[i];
+			
+			for (int j = 0; j<bucket.Count(); j++) {
+				(UInt64,Int64) pair = bucket[j];
+				cube_sum += BigInteger.Pow(pair.Item2, 2);
+			}
+		}
+		watch.Stop();
+		System.Console.WriteLine($"Final cube_sum: {cube_sum}. Took {watch.ElapsedMilliseconds} ms");
+		return cube_sum;
 	}
 }
