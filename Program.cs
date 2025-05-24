@@ -3,8 +3,8 @@
 	static void Main()
     {
         Random rand = new();
-		int l = 15; //random number between 1 and 21 (should be 64, but would run out
-								  //of memory with current implementation)
+		int l = rand.Next(1,21); //random number between 1 and 20 (should be 64, but would run out
+								 //of memory with current implementation)
 		
 		int n = 1000000; //key amount
 		
@@ -13,11 +13,9 @@
 		Hash.time_hash(Hash.mod_prime_hash, l, n);
 		System.Console.WriteLine();
 		
-		System.Console.WriteLine("Task 2:");
+		System.Console.WriteLine("Task 2:\nShort test of get/set/increment, should give values 5,0,11:");
 		Hashtable shift_table = new(Hash.shift_hash, l);
-		System.Console.WriteLine(Hash.shift_hash(3,l));
-		
-		System.Console.WriteLine("Short test of get/set/increment, should give values 5,0,11:");
+				
 		shift_table.set(3,5);
 		Int64 test1 = shift_table.get(3);
 		Int64 test2 = shift_table.get(1);
