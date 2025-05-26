@@ -22,15 +22,21 @@ class Hash {
     public static UInt64 mod_prime_hash(UInt64 x, int l) 
 	{
 		int q = 89;
-        BigInteger p = BigInteger.Pow(2,q)-1;
-		BigInteger axb = big_a * new BigInteger(x) + big_b;
+        BigInteger p = (BigInteger.One<<q)-1;
+		BigInteger axb = big_a * x + big_b;
 		
-		BigInteger y =(axb&p)+(axb>>q); // (a*x+b) mod p
-		if (y>=p) {
-			y-=p;	
+		BigInteger x_mod_p = (axb&p)+(axb>>q); // (a*x+b) mod p
+		if (x_mod_p>=p) {
+			x_mod_p-=p;	
 		} 
-		BigInteger lpow = BigInteger.Pow(2,l);
-		return (UInt64)(y % lpow); 
+		
+		BigInteger m = (BigInteger.One<<l)-1;
+		
+		BigInteger output = x_mod_p&m; // ((a*x+b) mod p) mod m
+		if (output>=m) {
+			output-=m;	
+		} 
+		return (UInt64)output; 
     }
 	
 	public static void time_hash(Func<UInt64,int,UInt64> hash, int l, int n)
