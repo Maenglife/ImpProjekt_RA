@@ -176,7 +176,7 @@ namespace MultiplyShiftHashing
 
             public int Hash(ulong x)
             {
-                return (int)(MultiplyShiftHashing(x, a l));
+                return (int)(MultiplyShiftHashing(x, a, l));
             }
             public long Get(ulong x) {
                 int idx = Hash(x);
