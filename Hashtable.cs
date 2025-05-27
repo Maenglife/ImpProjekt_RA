@@ -77,13 +77,13 @@ class Hashtable {
 		}
 		
 		System.Console.WriteLine($"Calculating cubic_sums, creation took {watch.ElapsedMilliseconds} ms:");
-		BigInteger cube_sum = 0;
+		Int64 cube_sum = 0;
 		for (int i = 0; i<this.pow_l; i++) {
 			List<(UInt64,Int64)> bucket = table[i];
 			
 			for (int j = 0; j<bucket.Count(); j++) {
 				(UInt64,Int64) pair = bucket[j];
-				cube_sum += BigInteger.Pow(pair.Item2, 2);
+				cube_sum += (Int64)Math.Pow(pair.Item2, 2);
 			}
 		}
 		watch.Stop();

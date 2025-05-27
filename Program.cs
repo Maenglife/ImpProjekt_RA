@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-class Program
+﻿class Program
 {
 	static void Main()
 	{
@@ -36,6 +34,12 @@ class Program
 		System.Console.WriteLine();
 		System.Console.WriteLine("Task 4:");
 
-		Hash.time_poly_hash(l, n);
+		Hash.time_poly_hash(l, n, Hash.a_array);
+		System.Console.WriteLine();
+		
+		System.Console.WriteLine("Task 5-6");
+		Countsketch sketch = new(l,Stream.CreateStream(n,l), Hash.a_array);
+		Int64 estimate = sketch.cubic_estimate();
+		System.Console.WriteLine(estimate);
 	}
 }
