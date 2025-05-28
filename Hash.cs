@@ -55,10 +55,7 @@ class Hash
 		BigInteger m = (BigInteger.One << l) - 1;
 
 		BigInteger output = x_mod_p & m; // ((a*x+b) mod p) mod m
-		if (output >= m)
-		{
-			output -= m;
-		}
+
 		return (UInt64)output;
 	}
 
