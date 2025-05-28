@@ -3,10 +3,10 @@
 	static void Main()
 	{
 		Random rand = new();
-		int l = rand.Next(1, 21); //random number between 1 and 20 (should be 64, but would run out
-								  //of memory with current implementation)
-
-		int n = 1000000; //key amount
+		int l = rand.Next(1, 65); //random number between 1 and 64
+		int l_small = rand.Next(1, 21); //random number between 1 and 20. Used in task 2 and 3; for 
+		// values above 20 we run out of memory with current implementation of hash table with chaining)
+		int n = 10000000; //number of elements in stream
 
 		System.Console.WriteLine("Task 1:");
 		Hash.time_hash(Hash.shift_hash, l, n);
@@ -14,7 +14,7 @@
 		System.Console.WriteLine();
 
 		System.Console.WriteLine("Task 2:\nShort test of get/set/increment, should give values 5,0,11:");
-		Hashtable shift_table = new(Hash.shift_hash, l);
+		Hashtable shift_table = new(Hash.shift_hash, l_small);
 
 		shift_table.set(3, 5);
 		Int64 test1 = shift_table.get(3);
@@ -26,9 +26,9 @@
 		System.Console.WriteLine();
 
 		System.Console.WriteLine("Task 3:");
-		Hashtable shift_table_2 = new(Hash.shift_hash, l);
+		Hashtable shift_table_2 = new(Hash.shift_hash, l_small);
 		shift_table_2.cubic_sums(n);
-		Hashtable modp_table_2 = new(Hash.mod_prime_hash, l);
+		Hashtable modp_table_2 = new(Hash.mod_prime_hash, l_small);
 		modp_table_2.cubic_sums(n);
 
 		System.Console.WriteLine();
