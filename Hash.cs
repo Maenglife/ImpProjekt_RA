@@ -1,9 +1,8 @@
 using System.Numerics;
 using System.Diagnostics;
-class Hash
-{
+class Hash {
 	//The following random bytes were created using the generator at random.org/bytes.
-	static readonly byte[] a = new byte[] { 0b10001101,0b01110010,0b01011000,0b10101100,0b10000000,
+	static readonly byte[] a = new byte[]  {0b10001101,0b01110010,0b01011000,0b10101100,0b10000000,
 											0b01100011,0b00001100,0b10010011 }; //random uneven 64 bit number
 	static readonly byte[] a88 = new byte[] {0b10001101,0b01001000,0b10110011,0b01100011,0b11011111,
 											0b00110010,0b11111110,0b11010101,0b11111010,0b01011111,
@@ -35,13 +34,11 @@ class Hash
 
 	public static  BigInteger[] a_array = {big_a0, big_a1, big_a2, big_a3}; // array for use in cs_hash.
 
-	public static UInt64 shift_hash(UInt64 x, int l)
-	{
+	public static UInt64 shift_hash(UInt64 x, int l) {
 		return (int_a * x) >> (64 - l);
 	}
 
-	public static UInt64 mod_prime_hash(UInt64 x, int l)
-	{
+	public static UInt64 mod_prime_hash(UInt64 x, int l) {
 		int q = 89;
 		BigInteger p = (BigInteger.One << q) - 1;
 		BigInteger axb = big_a * x + big_b;
@@ -59,9 +56,7 @@ class Hash
 		return (UInt64)output;
 	}
 
-	public static void time_hash(Func<UInt64, int, UInt64> hash, int l, int n)
-	{
-		IEnumerable<Tuple<ulong, int>> rand_stream = Stream.CreateStream(n, l);
+	public static void time_hash(Func<UInt64, int, UInt64> hash, IEnumerable<Tuple<ulong, int>> rand_stream, int l) {
 		BigInteger hash_sum = 0;
 
 		System.Console.WriteLine($"Starting {hash.Method.Name} hash:");
@@ -74,15 +69,14 @@ class Hash
 		System.Console.WriteLine($"Hash Sum: {hash_sum}, time taken: {watch.ElapsedMilliseconds} ms");
 	}
 	
-	public static BigInteger poly_hash(UInt64 x,BigInteger[] rand_array)
-	{
+	public static BigInteger poly_hash(UInt64 x,BigInteger[] rand_array) {
 		int k = 4;
 		int b = 89;
 		BigInteger p = (BigInteger.One << b) - 1;
 		BigInteger y = rand_array[k - 1];
 		for (int i = k - 2; i >= 0; i--)
 		{
-			y = y * x + a_array[i];
+			y = y * x + rand_array[i];
 			y = (y & p) + (y >> b);
 			if (y >= p)
 			{
@@ -95,7 +89,7 @@ class Hash
 	public static (Func<UInt64,UInt64>,Func<UInt64,int>) cs_hash(BigInteger[] array, int t) {
 		int b = 89;
 		UInt64 h(UInt64 x) {
-			return (UInt64)(poly_hash(x, array) & ((1 << t)-1));
+			return (UInt64)(poly_hash(x, array) & ((1UL << t)-1));
 		}
 		int s(UInt64 x) {
 			int bx = (int)(poly_hash(x,array) >> (b-1));
@@ -104,11 +98,8 @@ class Hash
 		return (h,s);
 	}
 	
-	public static void time_poly_hash(int l, int n, BigInteger[] array)
-	{
-		IEnumerable<Tuple<ulong, int>> rand_stream = Stream.CreateStream(n, l);
+	public static void time_poly_hash(IEnumerable<Tuple<ulong, int>> rand_stream, BigInteger[] array) {
 		BigInteger hash_sum = 0;
-
 		System.Console.WriteLine($"Starting poly_hash:");
 		Stopwatch watch = Stopwatch.StartNew();
 		foreach (var pair in rand_stream)

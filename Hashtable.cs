@@ -64,11 +64,10 @@ class Hashtable {
 		return;
 	}
 	
-	public BigInteger cubic_sums(int n) {
+	public BigInteger cubic_sums(IEnumerable<Tuple<ulong, int>> rand_stream, int n) {
 		if (this.pow_l > n) {
 			throw new ArgumentOutOfRangeException(nameof(n), "n must be greater than 2^l");
 		}
-		IEnumerable<Tuple<ulong, int>> rand_stream = Stream.CreateStream(n,this.l);
 		
 		System.Console.WriteLine($"Creating {this.hash.Method.Name} hashtable, n:{n}, l^2:{this.pow_l}:");
 		Stopwatch watch = Stopwatch.StartNew();
