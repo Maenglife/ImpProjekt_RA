@@ -25,4 +25,11 @@ class Stream {
 			yield return Tuple.Create(x&(((1UL<<l)-1UL)<<30),1);
 		}
 	}
+	
+	public static byte[] GenerateBytes(int amount) {
+		Random rnd = new System.Random();
+		Byte[] b = new Byte[amount];
+		rnd.NextBytes(b);
+		return b;
+	}
 }
