@@ -74,8 +74,9 @@ class Hashtable {
 		foreach (Tuple<ulong, int> pair in rand_stream) {
 			increment(pair.Item1,pair.Item2);
 		}
-		
 		System.Console.WriteLine($"Calculate keys and insert into table took {watch.ElapsedMilliseconds} ms");
+
+		//calculate sum of squares
 		Int64 sum_square = 0;
 		for (int i = 0; i<this.pow_l; i++) {
 			List<(UInt64,Int64)> bucket = table[i];
