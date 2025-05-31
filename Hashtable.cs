@@ -64,7 +64,7 @@ class Hashtable {
 		return;
 	}
 	
-	public BigInteger cubic_sums(IEnumerable<Tuple<ulong, int>> rand_stream, int n) {
+	public BigInteger sum_of_squares(IEnumerable<Tuple<ulong, int>> rand_stream, int n) {
 		if (this.pow_l > n) {
 			throw new ArgumentOutOfRangeException(nameof(n), "n must be greater than 2^l");
 		}
@@ -76,17 +76,17 @@ class Hashtable {
 		}
 		
 		System.Console.WriteLine($"Calculate keys and insert into table took {watch.ElapsedMilliseconds} ms");
-		Int64 cube_sum = 0;
+		Int64 sum_square = 0;
 		for (int i = 0; i<this.pow_l; i++) {
 			List<(UInt64,Int64)> bucket = table[i];
 			
 			for (int j = 0; j<bucket.Count(); j++) {
 				(UInt64,Int64) pair = bucket[j];
-				cube_sum += (Int64)Math.Pow(pair.Item2, 2);
+				sum_square += (Int64)Math.Pow(pair.Item2, 2);
 			}
 		}
 		watch.Stop();
-		System.Console.WriteLine($"Final cube sum: {cube_sum}. Final runtime: {watch.ElapsedMilliseconds} ms");
+		System.Console.WriteLine($"Final sum squares: {sum_square}. Final runtime: {watch.ElapsedMilliseconds} ms");
 		Console.WriteLine();
 
 		// Measure distribution of keys across buckets
@@ -112,6 +112,6 @@ class Hashtable {
 		Console.WriteLine($"  Empty buckets : {emptyBuckets} / {this.pow_l} ({100.0 * emptyBuckets / this.pow_l:F2}%)");
 		Console.WriteLine();
 
-		return cube_sum;
+		return sum_square;
 	}
 }

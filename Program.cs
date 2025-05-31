@@ -32,9 +32,9 @@ class Program {
 
 		System.Console.WriteLine("Task 3:");
 		Hashtable shift_table_2 = new(Hash.shift_hash, l_small);
-		BigInteger exact = shift_table_2.cubic_sums(rand_stream_small, n_small);
+		BigInteger exact = shift_table_2.sum_of_squares(rand_stream_small, n_small);
 		Hashtable modp_table_2 = new(Hash.mod_prime_hash, l_small);
-		modp_table_2.cubic_sums(rand_stream_small, n_small);
+		modp_table_2.sum_of_squares(rand_stream_small, n_small);
 		System.Console.WriteLine();
 
 		System.Console.WriteLine("Task 4:");
