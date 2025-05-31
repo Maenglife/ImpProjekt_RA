@@ -87,6 +87,31 @@ class Hashtable {
 		}
 		watch.Stop();
 		System.Console.WriteLine($"Final cube_sum: {cube_sum}. Took {watch.ElapsedMilliseconds} ms");
+		Console.WriteLine();
+
+		// Measure distribution of keys across buckets
+		int[] bucketSizes = new int[this.pow_l];
+		for (int i = 0; i < this.pow_l; i++) {
+    		bucketSizes[i] = this.table[i].Count;
+		}
+
+		double mean = bucketSizes.Average();
+		double variance = bucketSizes.Select(size => Math.Pow(size - mean, 2)).Average();
+		double stdDev = Math.Sqrt(variance);
+		int maxSize = bucketSizes.Max();
+		int minSize = bucketSizes.Min();
+		int nonEmptyBuckets = bucketSizes.Count(size => size > 0);
+		int emptyBuckets = (int)this.pow_l - nonEmptyBuckets;
+
+		Console.WriteLine($"Bucket distribution stats:");
+		Console.WriteLine($"  Mean size     : {mean:F2}");
+		Console.WriteLine($"  Variance      : {variance:F2}");
+		Console.WriteLine($"  Std deviation : {stdDev:F2}");
+		Console.WriteLine($"  Max size      : {maxSize}");
+		Console.WriteLine($"  Min size      : {minSize}");
+		Console.WriteLine($"  Empty buckets : {emptyBuckets} / {this.pow_l} ({100.0 * emptyBuckets / this.pow_l:F2}%)");
+		Console.WriteLine();
+
 		return cube_sum;
 	}
 }
