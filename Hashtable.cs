@@ -69,13 +69,13 @@ class Hashtable {
 			throw new ArgumentOutOfRangeException(nameof(n), "n must be greater than 2^l");
 		}
 		
-		System.Console.WriteLine($"Creating {this.hash.Method.Name} hashtable, n:{n}, l^2:{this.pow_l}:");
+		System.Console.WriteLine($"Calculate keys and insert into table using {this.hash.Method.Name}, n:{n}, l^2:{this.pow_l}");
 		Stopwatch watch = Stopwatch.StartNew();
 		foreach (Tuple<ulong, int> pair in rand_stream) {
 			increment(pair.Item1,pair.Item2);
 		}
 		
-		System.Console.WriteLine($"Calculating cubic_sums, creation took {watch.ElapsedMilliseconds} ms:");
+		System.Console.WriteLine($"Calculate keys and insert into table took {watch.ElapsedMilliseconds} ms");
 		Int64 cube_sum = 0;
 		for (int i = 0; i<this.pow_l; i++) {
 			List<(UInt64,Int64)> bucket = table[i];
@@ -86,7 +86,7 @@ class Hashtable {
 			}
 		}
 		watch.Stop();
-		System.Console.WriteLine($"Final cube_sum: {cube_sum}. Took {watch.ElapsedMilliseconds} ms");
+		System.Console.WriteLine($"Final cube sum: {cube_sum}. Final runtime: {watch.ElapsedMilliseconds} ms");
 		Console.WriteLine();
 
 		// Measure distribution of keys across buckets
