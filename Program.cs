@@ -1,10 +1,14 @@
-﻿using System.Numerics;
+﻿using System.Collections.Concurrent;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Net.Mime;
+using System.Numerics;
 
 class Program {
 	static void Main() {
 		Random rand = new();
 		int l = rand.Next(1, 65); //random number between 1 and 64
-		int l_small = rand.Next(1,21); //random number between 1 and 20. Used in task 2+. For values
+		int l_small = 20; //random number between 1 and 20. Used in task 2+. For values
 		// above 24 we run out of memory with current hash table implementation, but we dont use values
 		// above 20 to ensure run-time is not too long.
 		int n = 1<<l; //number of elements in stream must be >=2^l (note this will overflow for l>32,
@@ -42,20 +46,35 @@ class Program {
 		System.Console.WriteLine();
 		
 		System.Console.WriteLine("Task 5-6:");
-		int t = 4; // m = 2^t, where m is the length of the sketch array and possible hash values.
+		int t = 10; // m = 2^t, where m is the length of the sketch array and possible hash values.
+		Countsketch sketch_t5 = Experiment.time_sketch(5, rand_stream_small);
+		Countsketch sketch_t10 = Experiment.time_sketch(t, rand_stream_small);
+		Countsketch sketch_t15 = Experiment.time_sketch(15, rand_stream_small);
+		Countsketch sketch_t20 = Experiment.time_sketch(20, rand_stream_small);
 		
-		Countsketch sketch = new(t, rand_stream_small, Hash.a_array);
-		Int64 estimate = sketch.cubic_estimate();
-		System.Console.WriteLine($"Single sketch's estimate of cube_sum:{estimate}");
+		Int64 estimate_t5 = sketch_t5.cubic_estimate();
+		Int64 estimate_t10 = sketch_t10.cubic_estimate();
+		Int64 estimate_t15 = sketch_t15.cubic_estimate();
+		Int64 estimate_t20 = sketch_t20.cubic_estimate();
+		System.Console.WriteLine($"Single t=5 sketch estimate of cube_sum:{estimate_t5}");
+		System.Console.WriteLine($"Single t=10 sketch estimate of cube_sum:{estimate_t10}");
+		System.Console.WriteLine($"Single t=15 sketch estimate of cube_sum:{estimate_t15}");
+		System.Console.WriteLine($"Single t=20 sketch estimate of cube_sum:{estimate_t20}");
 		System.Console.WriteLine();
 		
 		System.Console.WriteLine("Task 7:");
 		List<BigInteger[]> random_bigints = Stream.CreateRandomAs("random_bytes.txt");// all random
 		// bytes from random.org divided into lists of 4 BigInteger to be used in each poly_hash,
 		// ensuring 4-independence.
-		Int64[] experiments = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, t);
-		Array.Sort(experiments);
-		System.Console.WriteLine($"experiement values between {experiments[0]}-{experiments[99]}, " +
-								 $"median: {experiments[49]}, exact from Task 3: {exact}");
+		
+		Int64[] experiments_t5 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, 5);
+		Int64[] experiments_t10 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, t);
+		Int64[] experiments_t15 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, 15);
+		Int64[] experiments_t20 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, 20);
+		
+		Experiment.analyse_experiements(experiments_t5,exact);
+		Experiment.analyse_experiements(experiments_t10,exact);
+		Experiment.analyse_experiements(experiments_t15,exact);
+		Experiment.analyse_experiements(experiments_t20,exact);
 	}
 }

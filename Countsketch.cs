@@ -25,6 +25,13 @@ class Countsketch {
 }
 
 class Experiment {
+	public static Countsketch time_sketch(int t, IEnumerable<Tuple<ulong, int>> randstream) {
+		Stopwatch cs_watch = Stopwatch.StartNew();
+		Countsketch sketch = new(t, randstream, Hash.a_array);
+		cs_watch.Stop();
+		System.Console.WriteLine($"took {cs_watch.ElapsedMilliseconds} ms to create sketch with m=2^{t}");
+		return sketch;
+	}
 	public static Int64[] cubic_experiments(List<BigInteger[]> big_ints,
 											IEnumerable<Tuple<ulong, int>> rand_stream,
 											int amount, int t) {
@@ -39,5 +46,46 @@ class Experiment {
 		watch.Stop();
 		System.Console.WriteLine($"Experiments took {watch.ElapsedMilliseconds} ms");
 		return cube_sum_array;
+	}
+	
+	public static void analyse_experiements(Int64[] experiments, BigInteger exact) {
+		BigInteger mean_square_error = 0;
+		foreach (Int64 experiment in experiments) {
+			BigInteger diff = (BigInteger)experiment-exact;
+			mean_square_error += diff*diff;
+		}
+		
+		List<Int64[]> partitions = new List<Int64[]>();
+		for (int i = 0; i<99; i+=11) {
+			Int64[] partition = experiments.Skip(i).Take(i+11).ToArray();
+			Array.Sort(partition);
+			partitions.Add(partition);
+		}
+		
+		Array.Sort(experiments);
+		(int,Int64)[] all_coordinates = new (int,Int64)[100];
+		for (int i = 0; i<100; i++) {
+			(int,Int64) coordinate = (i, experiments[i]);
+			all_coordinates[i] = (i, experiments[i]);
+		} 
+		string coordinate_format = string.Join(", ", all_coordinates.Select(p => $"[{p.Item1 + 1}, {p.Item2}]")); // to be inserted in maple
+		System.Console.WriteLine($"All coordinates : [{coordinate_format}]");
+		
+		System.Console.WriteLine($"Mean square error was: {mean_square_error}");
+		Int64[] all_medians = new Int64[9];
+		System.Console.WriteLine($"Exact S value from Task 3: {exact}");
+		for (int i = 0; i<9; i++) {
+			Int64[] current = partitions[i];
+			System.Console.WriteLine($"List G_{i+1} = from {current[0]}-{current[10]}, Median value = {current[5]}");
+			all_medians[i] = current[5];
+		}
+		Array.Sort(all_medians);
+		(int,Int64)[] median_coordinates = new (int,Int64)[9];
+		for (int i = 0; i<9; i++) {
+			(int,Int64) coordinate = (i, all_medians[i]);
+			median_coordinates[i] = (i, all_medians[i]);
+		} 
+		string median_format = string.Join(", ", median_coordinates.Select(p => $"[{p.Item1 + 1}, {p.Item2}]")); // to be inserted in maple
+		System.Console.WriteLine($"All median values : [{median_format}]");
 	}
 }
