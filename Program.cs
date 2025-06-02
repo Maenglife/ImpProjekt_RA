@@ -52,10 +52,10 @@ class Program {
 		Countsketch sketch_t15 = Experiment.time_sketch(15, rand_stream_small);
 		Countsketch sketch_t20 = Experiment.time_sketch(20, rand_stream_small);
 		
-		Int64 estimate_t5 = sketch_t5.cubic_estimate();
-		Int64 estimate_t10 = sketch_t10.cubic_estimate();
-		Int64 estimate_t15 = sketch_t15.cubic_estimate();
-		Int64 estimate_t20 = sketch_t20.cubic_estimate();
+		Int64 estimate_t5 = sketch_t5.square_estimate();
+		Int64 estimate_t10 = sketch_t10.square_estimate();
+		Int64 estimate_t15 = sketch_t15.square_estimate();
+		Int64 estimate_t20 = sketch_t20.square_estimate();
 		System.Console.WriteLine($"Single t=5 sketch estimate of cube_sum:{estimate_t5}");
 		System.Console.WriteLine($"Single t=10 sketch estimate of cube_sum:{estimate_t10}");
 		System.Console.WriteLine($"Single t=15 sketch estimate of cube_sum:{estimate_t15}");
@@ -67,10 +67,10 @@ class Program {
 		// bytes from random.org divided into lists of 4 BigInteger to be used in each poly_hash,
 		// ensuring 4-independence.
 		
-		Int64[] experiments_t5 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, 5);
-		Int64[] experiments_t10 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, t);
-		Int64[] experiments_t15 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, 15);
-		Int64[] experiments_t20 = Experiment.cubic_experiments(random_bigints, rand_stream_small, 100, 20);
+		Int64[] experiments_t5 = Experiment.square_experiments(random_bigints, rand_stream_small, 100, 5);
+		Int64[] experiments_t10 = Experiment.square_experiments(random_bigints, rand_stream_small, 100, t);
+		Int64[] experiments_t15 = Experiment.square_experiments(random_bigints, rand_stream_small, 100, 15);
+		Int64[] experiments_t20 = Experiment.square_experiments(random_bigints, rand_stream_small, 100, 20);
 		
 		Experiment.analyse_experiements(experiments_t5,exact);
 		Experiment.analyse_experiements(experiments_t10,exact);

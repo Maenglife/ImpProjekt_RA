@@ -15,7 +15,7 @@ class Countsketch {
 		}
 	}
 	
-	public Int64 cubic_estimate() {
+	public Int64 square_estimate() {
 		Int64 cube_sum = 0;
 		foreach (Int64 val in this.sketch) {
 			cube_sum += val * val;
@@ -32,7 +32,7 @@ class Experiment {
 		System.Console.WriteLine($"took {cs_watch.ElapsedMilliseconds} ms to create sketch with m=2^{t}");
 		return sketch;
 	}
-	public static Int64[] cubic_experiments(List<BigInteger[]> big_ints,
+	public static Int64[] square_experiments(List<BigInteger[]> big_ints,
 											IEnumerable<Tuple<ulong, int>> rand_stream,
 											int amount, int t) {
 		Int64[] cube_sum_array = new Int64[amount];
@@ -41,7 +41,7 @@ class Experiment {
 		for (int i = 0; i<amount; i++) {
 			BigInteger[] rand_a_vals = big_ints[i];
 			Countsketch new_experiment = new(t, rand_stream, rand_a_vals);
-			cube_sum_array[i] = new_experiment.cubic_estimate();
+			cube_sum_array[i] = new_experiment.square_estimate();
 		}
 		watch.Stop();
 		System.Console.WriteLine($"Experiments took {watch.ElapsedMilliseconds} ms");
